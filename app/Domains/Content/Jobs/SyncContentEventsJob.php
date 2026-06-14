@@ -8,19 +8,34 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Domains\Content\Models\Content;
 use App\Domains\Content\Services\SyncContentEventsService;
 
-class SyncContentEventsJob implements ShouldQueue
+class SyncContentEventsJob
+    implements ShouldQueue
 {
     use Queueable;
 
     public function handle(
         SyncContentEventsService $service
-    ): void
-    {
+    ): void {
+
         Content::query()
-            ->where('status', 'live')
+
+            ->where(
+                'status',
+                'live'
+            )
+
             ->each(
-                fn (Content $content)
-                    => $service->sync($content)
+
+                function (
+                    Content $content
+                ) use (
+                    $service
+                ) {
+
+                    $service->sync(
+                        $content
+                    );
+                }
             );
     }
 }

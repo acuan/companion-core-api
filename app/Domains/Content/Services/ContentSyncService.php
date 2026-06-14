@@ -10,42 +10,52 @@ class ContentSyncService
 {
     public function __construct(
         protected FootballApiProvider $provider,
-        protected FootballContentMapper $mapper
+        protected FootballContentMapper $mapper,
+        protected ContentStateService $stateService
     ) {
     }
 
-    public function syncToday(): void
+    public function syncToday(): int
     {
-        $response =
-            $this->provider
-                ->fixturesByDate(
-                    now()->toDateString()
-                );
+        $response = $this->provider->fixturesByDate(
+            now()->toDateString()
+        );
 
-        foreach (
-            $response['response']
-            ?? []
-            as $fixture
-        ) {
+        $count = 0;
 
-            $data =
-                $this->mapper
-                    ->mapFixture(
-                        $fixture
-                    );
+        foreach ($response['response'] ?? [] as $fixture) {
 
-            Content::updateOrCreate(
+            $this->syncFixture($fixture);
 
-                [
-                    'provider' =>
-                        $data['provider'],
-
-                    'external_id' =>
-                        $data['external_id']
-                ],
-
-                $data
-            );
+            $count++;
         }
+
+        return $count;
+    }
+
+    public function syncFixture(
+        array $fixture
+    ): Content {
+
+        $data = $this->mapper->mapFixture(
+            $fixture
+        );
+
+        $content = Content::updateOrCreate(
+
+            [
+                'provider'    => $data['provider'],
+                'external_id' => $data['external_id'],
+            ],
+
+            $data
+        );
+
+        $this->stateService->update(
+            $content,
+            $fixture
+        );
+
+        return $content;
     }
 }

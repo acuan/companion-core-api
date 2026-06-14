@@ -7,15 +7,18 @@ use App\Domains\Content\Providers\WorldCup2026Provider;
 
 class SyncTeamsJob
 {
-    public function handle(
-        WorldCup2026Provider $provider
-    ): void {
+    public function __construct(
+        protected WorldCup2026Provider $provider
+    ) {
+    }
 
-        $response =
-            $provider->teams();
+    public function handle(): void
+    {
+        $teams =
+            $this->provider
+                ->teams();
 
-        foreach ( $response  as $team
-        ) {
+        foreach ($teams as $team) {
 
             Team::updateOrCreate(
 

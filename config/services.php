@@ -47,5 +47,12 @@ return [
         'season' =>
             env('API_FOOTBALL_SEASON'),
     ],
+    'worldcup2026' => [
+
+        'base_url' => env(
+            'WORLDCUP2026_URL'
+        ),
+
+    ],
 
 ];

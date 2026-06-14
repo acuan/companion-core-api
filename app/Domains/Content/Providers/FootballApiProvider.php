@@ -3,8 +3,10 @@
 namespace App\Domains\Content\Providers;
 
 use Illuminate\Support\Facades\Http;
+use App\Domains\Content\Contracts\ContentProviderInterface;
 
-class FootballApiProvider
+
+class FootballApiProvider implements ContentProviderInterface
 {
     protected string $baseUrl;
 

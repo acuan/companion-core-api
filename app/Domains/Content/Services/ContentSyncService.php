@@ -2,60 +2,115 @@
 
 namespace App\Domains\Content\Services;
 
+use Carbon\Carbon;
+
 use App\Domains\Content\Models\Content;
-use App\Domains\Content\Mappers\FootballContentMapper;
-use App\Domains\Content\Providers\FootballApiProvider;
+use App\Domains\Content\Contracts\ContentProviderInterface;
 
 class ContentSyncService
 {
     public function __construct(
-        protected FootballApiProvider $provider,
-        protected FootballContentMapper $mapper,
-        protected ContentStateService $stateService
+        protected ContentProviderInterface $provider
     ) {
     }
 
-    public function syncToday(): int
+    public function sync(): int
     {
-        $response = $this->provider->fixturesByDate(
-            now()->toDateString()
-        );
+        $games =
+            $this->provider
+                ->games();
 
         $count = 0;
 
-        foreach ($response['response'] ?? [] as $fixture) {
+        foreach ($games as $game) {
 
-            $this->syncFixture($fixture);
+            Content::updateOrCreate(
+
+                [
+                    'provider' =>
+                        'worldcup2026',
+
+                    'external_id' =>
+                        $game['id'],
+                ],
+
+                [
+                    'content_type' =>
+                        'football_match',
+
+                    'title' =>
+
+                        trim(
+                            ($game['home_team_name_en'] ?? '')
+                            .' vs '.
+                            ($game['away_team_name_en'] ?? '')
+                        ),
+
+                    'status' =>
+
+                        strtolower(
+                            $game['finished']
+                            ?? 'false'
+                        ) === 'true'
+
+                            ? 'finished'
+
+                            : 'scheduled',
+
+                    'starts_at' =>
+
+                        ! empty($game['local_date'])
+
+                            ? Carbon::parse(
+                                $game['local_date']
+                            )
+
+                            : null,
+
+                    'metadata' => [
+
+                        'group' =>
+                            $game['group']
+                            ?? null,
+
+                        'matchday' =>
+                            $game['matchday']
+                            ?? null,
+
+                        'stadium_id' =>
+                            $game['stadium_id']
+                            ?? null,
+
+                        'home_team_id' =>
+                            $game['home_team_id']
+                            ?? null,
+
+                        'away_team_id' =>
+                            $game['away_team_id']
+                            ?? null,
+
+                        'home_score' =>
+                            $game['home_score']
+                            ?? 0,
+
+                        'away_score' =>
+                            $game['away_score']
+                            ?? 0,
+
+                        'home_scorers' =>
+                            $game['home_scorers']
+                            ?? null,
+
+                        'away_scorers' =>
+                            $game['away_scorers']
+                            ?? null,
+                    ],
+                ]
+            );
 
             $count++;
         }
 
         return $count;
-    }
-
-    public function syncFixture(
-        array $fixture
-    ): Content {
-
-        $data = $this->mapper->mapFixture(
-            $fixture
-        );
-
-        $content = Content::updateOrCreate(
-
-            [
-                'provider'    => $data['provider'],
-                'external_id' => $data['external_id'],
-            ],
-
-            $data
-        );
-
-        $this->stateService->update(
-            $content,
-            $fixture
-        );
-
-        return $content;
     }
 }

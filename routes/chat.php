@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Domains\Chat\Controllers\ChatController;
+use App\Http\Controllers\ChatController;
 
 Route::middleware('auth:sanctum')
     ->prefix('chat')

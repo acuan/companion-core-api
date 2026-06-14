@@ -19,17 +19,18 @@ class ContentController extends Controller
     public function index()
     {
         return ContentResource::collection(
-            $this->service->getTodayContents()
+        $this->service->getContents()
         );
     }
 
-    public function show(Content $content)
+
+    public function show(
+        Content $content
+    )
     {
         return new ContentDetailResource(
-            $content->load([
-                'state',
-                'events'
-            ])
+        $content
         );
     }
+
 }

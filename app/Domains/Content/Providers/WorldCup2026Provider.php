@@ -76,7 +76,7 @@ class WorldCup2026Provider implements ContentProviderInterface
        $response =  $this->get(
             'teams'
         );
-        dd($response);
+
         return $response['teams']
             ?? [];
     }

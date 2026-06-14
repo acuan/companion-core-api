@@ -34,4 +34,16 @@ class ContentService
             ])
             ->findOrFail($id);
     }
+
+    public function getContents()
+    {
+        return Content::query()
+        ->where(
+        'content_type',
+        'football_match'
+        )
+        ->orderBy('starts_at')
+        ->get();
+    }
+
 }

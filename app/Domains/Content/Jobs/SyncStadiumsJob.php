@@ -18,11 +18,7 @@ class SyncStadiumsJob
             $this->provider
                 ->stadiums();
 
-        foreach (
-            $response['stadiums']
-            ?? []
-            as $stadium
-        ) {
+        foreach ( $response as $stadium ) {
 
             Stadium::updateOrCreate(
 

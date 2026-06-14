@@ -18,11 +18,7 @@ class SyncGroupsJob
             $this->provider
                 ->groups();
 
-        foreach (
-            $response['groups']
-            ?? []
-            as $group
-        ) {
+        foreach ( $response as $group ) {
 
             Group::updateOrCreate(
 

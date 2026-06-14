@@ -40,6 +40,12 @@ return [
         'url' => env('API_FOOTBALL_URL'),
 
         'key' => env('API_FOOTBALL_KEY'),
+
+        'world_cup_league_id' =>
+            env('API_FOOTBALL_WORLD_CUP_LEAGUE_ID'),
+
+        'season' =>
+            env('API_FOOTBALL_SEASON'),
     ],
 
 ];

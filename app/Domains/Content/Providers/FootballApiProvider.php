@@ -31,19 +31,30 @@ class FootballApiProvider
     /**
      * Obtener fixtures por fecha
      */
-    public function fixturesByDate(string $date): array
+    public function fixturesByDate(
+        string $date
+    ): array
     {
         return $this->client()
             ->get(
                 "{$this->baseUrl}/fixtures",
                 [
                     'date' => $date,
+
+                    'league' =>
+                        config(
+                            'services.api_football.world_cup_league_id'
+                        ),
+
+                    'season' =>
+                        config(
+                            'services.api_football.season'
+                        ),
                 ]
             )
             ->throw()
             ->json();
     }
-
     /**
      * Obtener fixture por ID
      */

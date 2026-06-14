@@ -14,10 +14,7 @@ class SyncTeamsJob
         $response =
             $provider->teams();
 
-        foreach (
-            $response['teams']
-            ?? []
-            as $team
+        foreach ( $response  as $team
         ) {
 
             Team::updateOrCreate(

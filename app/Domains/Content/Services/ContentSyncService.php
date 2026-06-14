@@ -24,7 +24,7 @@ class ContentSyncService
 
 
 
-        foreach ($games['games'] ?? []  as $game) {
+        foreach ($games as $game) {
 
             Content::updateOrCreate(
 

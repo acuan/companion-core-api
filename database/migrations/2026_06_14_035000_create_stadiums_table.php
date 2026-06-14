@@ -17,6 +17,7 @@ return new class extends Migration
         $table->string('provider');
         $table->string('external_id');
         $table->string('name');
+        $table->string('fifa_name');
         $table->string('city');
         $table->string('country');
         $table->integer('capacity')

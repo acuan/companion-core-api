@@ -19,7 +19,7 @@ class CompanionSync extends Command
     ): int {
 
         $count =
-            $service->syncToday();
+            $service->sync();
 
         $this->info(
             "{$count} contents synced"

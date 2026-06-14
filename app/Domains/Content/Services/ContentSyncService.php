@@ -22,6 +22,11 @@ class ContentSyncService
 
         $count = 0;
 
+         dd(
+            array_keys($games),
+            $games[0] ?? null
+        );
+
         foreach ($games as $game) {
 
             Content::updateOrCreate(

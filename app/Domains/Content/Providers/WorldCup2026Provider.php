@@ -73,9 +73,12 @@ class WorldCup2026Provider implements ContentProviderInterface
 
     public function teams(): array
     {
-        return $this->get(
+       $response =  $this->get(
             'teams'
-        )['teams'] ?? [];
+        );
+
+        return $response['teams']
+            ?? [];
     }
 
     public function team(
@@ -89,9 +92,12 @@ class WorldCup2026Provider implements ContentProviderInterface
 
     public function groups(): array
     {
-        return $this->get(
+       $response =  $this->get(
             'groups'
-        )['groups'] ?? [];
+        );
+
+        return $response['groups']
+            ?? [];
     }
 
     public function group(
@@ -105,9 +111,12 @@ class WorldCup2026Provider implements ContentProviderInterface
 
     public function stadiums(): array
     {
-        return $this->get(
+        $response= $this->get(
             'stadiums'
-        )['stadiums'] ?? [];
+        );
+
+        return $response['stadiums']
+            ?? [];
     }
 
     public function stadium(

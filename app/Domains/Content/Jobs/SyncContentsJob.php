@@ -31,7 +31,7 @@ class SyncContentsJob implements ShouldQueue
         ContentSyncService $contentSyncService
     ): void {
 
-        $contentSyncService->syncToday();
+        $contentSyncService->sync();
 
     }
 }

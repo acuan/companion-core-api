@@ -52,6 +52,7 @@ return [
         'base_url' => env(
             'WORLDCUP2026_URL'
         ),
+        'key' => env('WORLDCUP2026_KEY'),
 
     ],
 

@@ -27,7 +27,7 @@ class SyncGroupsJob
             Group::updateOrCreate(
 
                 [
-                    'provider' => 'worldcup2026',
+                    'provider' =>  WorldCup2026Provider::PROVIDER,
 
                     'name' =>
                         $group['name'],

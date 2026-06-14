@@ -2,13 +2,18 @@
 
 namespace App\Domains\Content\Providers;
 
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
-use App\Domains\Content\Contracts\ContentProviderInterface;
 
+use App\Domains\Content\Contracts\ContentProviderInterface;
 
 class WorldCup2026Provider implements ContentProviderInterface
 {
+    public const PROVIDER = 'worldcup2026';
+
     protected string $baseUrl;
+
+    protected string $apiKey;
 
     public function __construct()
     {
@@ -16,55 +21,98 @@ class WorldCup2026Provider implements ContentProviderInterface
             config('services.worldcup2026.base_url'),
             '/'
         );
+
+        $this->apiKey = config(
+            'services.worldcup2026.key'
+        );
     }
 
-    protected function get(string $endpoint): array
+    protected function client(): PendingRequest
     {
         return Http::timeout(15)
+            ->acceptJson()
+            ->withToken(
+                $this->apiKey
+            );
+    }
+
+    protected function get(
+        string $endpoint
+    ): array {
+
+        return $this->client()
+
             ->get(
                 "{$this->baseUrl}/{$endpoint}"
             )
+
             ->throw()
+
             ->json();
     }
 
     public function games(): array
     {
-        return $this->get('games');
+        return $this->get(
+            'games'
+        );
     }
 
-    public function game(string $id): array
+    public function game(
+        string $id
+    ): array
     {
-        return $this->get("game/{$id}");
+        return $this->get(
+            "game/{$id}"
+        );
     }
 
     public function teams(): array
     {
-        return $this->get('teams');
+        return $this->get(
+            'teams'
+        );
     }
 
-    public function team(string $id): array
+    public function team(
+        string $id
+    ): array
     {
-        return $this->get("team/{$id}");
+        return $this->get(
+            "team/{$id}"
+        );
     }
 
     public function groups(): array
     {
-        return $this->get('groups');
+        return $this->get(
+            'groups'
+        );
     }
 
-    public function group(string $id): array
+    public function group(
+        string $id
+    ): array
     {
-        return $this->get("group/{$id}");
+        return $this->get(
+            "group/{$id}"
+        );
     }
 
     public function stadiums(): array
     {
-        return $this->get('stadiums');
+        return $this->get(
+            'stadiums'
+        );
     }
 
-    public function stadium(string $id): array
+    public function stadium(
+        string $id
+    ): array
     {
-        return $this->get("stadium/{$id}");
+        return $this->get(
+            "stadium/{$id}"
+        );
     }
 }
+
